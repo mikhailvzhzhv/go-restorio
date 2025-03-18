@@ -1,7 +1,7 @@
 http:
   routers:
     user-registration:
-      rule: "Path(`/api/user/registration`) && Method(`POST`)"
+      rule: "Path(`/api/test`) && Method(`POST`)"
       service: user-service
       entryPoints:
         - web
