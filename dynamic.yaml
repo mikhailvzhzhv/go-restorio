@@ -1,0 +1,30 @@
+http:
+  routers:
+    user-registration:
+      rule: "Path(`/api/user/registration`) && Method(`POST`)"
+      service: user-service
+      entryPoints:
+        - web
+
+    user-change-number:
+      rule: "PathPrefix(`/api/user/change_number`)"
+      service: user-service
+      entryPoints:
+        - web
+      middlewares:
+        - auth-middleware
+
+  services:
+    user-service:
+      loadBalancer:
+        servers:
+          - url: "http://user:8081"
+
+  middlewares:
+    auth-middleware:
+      forwardAuth:
+        address: "http://keycloak:8090/realms/my-realm/protocol/openid-connect/userinfo"
+        trustForwardHeader: true
+        authResponseHeaders:
+          - Authorization
+          - X-User-Id
